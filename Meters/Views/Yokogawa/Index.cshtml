@@ -1,0 +1,111 @@
+﻿@*
+    Copyright 2017 University of Michigan
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*@
+
+@{
+    ViewBag.Title = "Summary";
+}
+
+@Html.Partial("_YokogawaMenuPartial")
+
+<div class="panel panel-default summary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Yokogawa Summary</h3>
+    </div>
+    <div class="panel-body">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Total Files</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static total-files"></p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Total Imports</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static total-imports"></p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Total Data Records</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static total-data-records"></p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Last Import Date</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static last-import-date"></p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Last Import Path</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static last-import-path"></p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Last Import Line Count</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static last-import-lines"></p>
+                </div>
+            </div>
+        </div>
+        <div class="alert alert-danger" role="alert" style="display: none;"></div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(".summary").each(function () {
+            var $this = $(this);
+
+            var getErrorMessage = function (xhr) {
+                if (xhr.readyState == 0)
+                    return "An connection error occurred. The service may not be running.";
+                else if (xhr.responseJSON)
+                    return xhr.responseJSON.ExceptionMessage;
+                else
+                    return xhr.responseText;
+            }
+
+            var loadSummary = function () {
+                $.ajax({
+                    "url": '@Url.Content("~/api/summary")',
+                    "method": "GET",
+                }).done(function (data) {
+                    $(".form-horizontal", $this).show();
+                    $(".alert-danger", $this).html("").hide();
+
+                    $(".total-files", $this).html(data.TotalFiles);
+                    $(".total-imports", $this).html(data.TotalImports);
+                    $(".total-data-records", $this).html(data.TotalDataRecords);
+                    $(".last-import-date", $this).html(moment(data.LastImport.ImportDate).format("YYYY-MM-DD HH:mm:ss"));
+                    $(".last-import-path", $this).html(data.LastImport.FilePath);
+                    $(".last-import-lines", $this).html(data.LastImport.LineCount);
+                }).fail(function (xhr) {
+                    console.log(xhr);
+                    $(".form-horizontal", $this).hide();
+                    $(".alert-danger", $this).html(getErrorMessage(xhr)).show();
+                });
+            };
+
+            loadSummary();
+
+            setInterval(loadSummary, 13000);
+        });
+    </script>
+}
+

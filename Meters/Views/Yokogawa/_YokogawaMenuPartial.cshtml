@@ -1,0 +1,36 @@
+﻿@*
+    Copyright 2017 University of Michigan
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*@
+
+@using LNF.Cache;
+@using LNF.Models.Data;
+@using Meters.Models;
+
+@{
+    bool isAdmin = CacheManager.Current.CurrentUser.HasPriv(ClientPrivilege.Administrator);
+
+    var menuItems = new List<MenuItem>();
+    menuItems.Add(new MenuItem() { Text = "Summary", Url = Url.Content("~/yokogawa"), Tag = "summary", Visible = true });
+    menuItems.Add(new MenuItem() { Text = "Reports", Url = Url.Content("~/yokogawa/reports"), Tag = "reports", Visible = true });
+    menuItems.Add(new MenuItem() { Text = "Admin", Url = Url.Content("~/yokogawa/admin"), Tag = "admin", Visible = isAdmin });
+
+}
+
+<ul class="nav nav-tabs">
+    @foreach (var m in menuItems.Where(x => x.Visible))
+    {
+        <li role="presentation" class="@m.GetCssClass(ViewBag.CurrentTab)"><a href="@m.Url">@m.Text</a></li>
+    }
+</ul>
