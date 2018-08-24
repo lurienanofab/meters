@@ -1,4 +1,5 @@
 ﻿using LNF;
+using LNF.Impl.DependencyInjection.Web;
 using LNF.Repository;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -12,6 +13,7 @@ namespace Meters
 
         protected void Application_Start()
         {
+            ServiceProvider.Current = IOC.Resolver.GetInstance<ServiceProvider>();
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             GlobalConfiguration.Configure(WebApiConfig.Register);
@@ -19,12 +21,13 @@ namespace Meters
 
         protected void Application_BeginRequest()
         {
-            _uow = Providers.DataAccess.StartUnitOfWork();
+            _uow = ServiceProvider.Current.DataAccess.StartUnitOfWork();
         }
 
         protected void Application_EndRequest()
         {
-            _uow.Dispose();
+            if (_uow != null)
+                _uow.Dispose();
         }
     }
 }
