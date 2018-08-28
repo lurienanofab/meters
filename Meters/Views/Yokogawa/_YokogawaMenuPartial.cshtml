@@ -5,10 +5,10 @@
 @{
     bool isAdmin = CacheManager.Current.CurrentUser.HasPriv(ClientPrivilege.Administrator);
 
-    var menuItems = new List<MenuItem>();
-    menuItems.Add(new MenuItem() { Text = "Summary", Url = Url.Content("~/yokogawa"), Tag = "summary", Visible = true });
-    menuItems.Add(new MenuItem() { Text = "Reports", Url = Url.Content("~/yokogawa/reports"), Tag = "reports", Visible = true });
-    menuItems.Add(new MenuItem() { Text = "Admin", Url = Url.Content("~/yokogawa/admin"), Tag = "admin", Visible = isAdmin });
+    var menuItems = new List<MeterMenuItem>();
+    menuItems.Add(new MeterMenuItem() { Text = "Summary", Url = Url.Content("~/yokogawa"), Tag = "summary", Visible = true });
+    menuItems.Add(new MeterMenuItem() { Text = "Reports", Url = Url.Content("~/yokogawa/reports"), Tag = "reports", Visible = true });
+    menuItems.Add(new MeterMenuItem() { Text = "Admin", Url = Url.Content("~/yokogawa/admin"), Tag = "admin", Visible = isAdmin });
 
 }
 

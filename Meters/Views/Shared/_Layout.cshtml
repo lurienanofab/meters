@@ -3,11 +3,10 @@
 @using Meters.Models;
 
 @{
-    ClientModel client = CacheManager.Current.CurrentUser;
+    ClientItem client = CacheManager.Current.CurrentUser;
 
-    var menuItems = new List<MenuItem>();
-    //ViewBag.CurrentPage
-    menuItems.Add(new MenuItem() { Text = "Yokogawa", Url = Url.Content("~/yokogawa"), Tag = "yokogawa", Visible = true });
+    var menuItems = new List<MeterMenuItem>();
+    menuItems.Add(new MeterMenuItem() { Text = "Yokogawa", Url = Url.Content("~/yokogawa"), Tag = "yokogawa", Visible = true });
 }
 
 <!DOCTYPE html>

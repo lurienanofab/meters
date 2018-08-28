@@ -4,7 +4,7 @@
     ViewBag.Title = "Reports";
 
     var defaultEndDate = DateTime.Now.FirstOfMonth();
-    var defaultStartDate = defaultEndDate.AddYears(-1).AddMonths(-1);
+    var defaultStartDate = defaultEndDate.AddMonths(-3);
 }
 
 @Html.Partial("_YokogawaMenuPartial")
@@ -25,6 +25,7 @@
                 <label class="col-sm-2 control-label">End Date</label>
                 <div class="col-sm-2">
                     <input type="text" placeholder="MM/DD/YYYY" class="end-date form-control" value="@defaultEndDate.ToString("MM/dd/yyyy")" />
+                    <span class="help-block"><em>End Date is the last included sample date. Includes usage through the end of the previous day.</em></span>
                 </div>
             </div>
             <div class="form-group">

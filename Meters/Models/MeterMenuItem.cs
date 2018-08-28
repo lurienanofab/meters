@@ -1,6 +1,6 @@
 ﻿namespace Meters.Models
 {
-    public class MenuItem
+    public class MeterMenuItem
     {
         public string Text { get; set; }
         public string Url { get; set; }
